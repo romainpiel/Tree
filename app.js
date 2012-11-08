@@ -27,7 +27,7 @@ passport.use(new AppDotNetStrategy({
     clientID: nconf.get('appnet_consumer_key'),
     clientSecret: nconf.get('appnet_consumer_secret'),
     scope: 'stream messages write_post follow',
-    callbackURL: nconf.get('domain') + ':' + nconf.get('port') + '/auth/appdotnet/callback'
+    callbackURL: nconf.get('domain') + nconf.get('authPort') + '/auth/appdotnet/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function (err) {
@@ -50,4 +50,4 @@ var isLoggedIn = function(req, res, next) {
 require('./routes')(app, isLoggedIn);
 require('./routes/auth')(app, passport);
 
-server.listen(nconf.get('port'));
+server.listen(process.env.PORT || nconf.get('port'));
