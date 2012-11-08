@@ -1,6 +1,7 @@
 {
     "domain": "http://treeforapp.herokuapp.com",
     "port": 3000,
+    "authPort": "",
     "session_secret": "secret",
     "session_cookie": "session_your_cookie_name",
     "appnet_consumer_key": "Tj7Qm8WpFvkHEcRLrRGRCH5SjKq6TUZ6",
