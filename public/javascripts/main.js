@@ -1,78 +1,94 @@
 requirejs.config({
     paths: {
         jquery: 'lib/jquery-1.8.2.min',
-        arborjs: 'lib/arborjs/'
+        arborjs: 'lib/arborjs'
     }
 });
 
 
 // Load the application.
 require(
-    [
-        "jquery",
-        "arborjs/renderer",
-        "arborjs/nav",
-        "arborjs/arbor"
-    ],
-    function($, Renderer, Nav){
-          
-          $(document).ready(function(){
-            var CLR = {
-              branch:"#b2b19d",
-              code:"orange",
-              doc:"#922E00",
-              demo:"#a7af00"
-            }
+["jquery", "arborjs/renderer", "arborjs/nav", "arborjs/arbor"], function($, Renderer, Nav) {
 
-            var theUI = {
-              nodes:{"arbor.js":{color:"red", shape:"dot", alpha:1}, 
-              
-                     demos:{color:CLR.branch, shape:"dot", alpha:1}, 
-                     halfviz:{color:CLR.demo, alpha:0, link:'/halfviz'},
-                     atlas:{color:CLR.demo, alpha:0, link:'/atlas'},
-                     echolalia:{color:CLR.demo, alpha:0, link:'/echolalia'},
+    var arborData = {
+        "nodes": {},
+        "edges": {}
+    };
 
-                     docs:{color:CLR.branch, shape:"dot", alpha:1}, 
-                     reference:{color:CLR.doc, alpha:0, link:'#reference'},
-                     introduction:{color:CLR.doc, alpha:0, link:'#introduction'},
+    $(function() {
 
-                     code:{color:CLR.branch, shape:"dot", alpha:1},
-                     github:{color:CLR.code, alpha:0, link:'https://github.com/samizdatco/arbor'},
-                     ".zip":{color:CLR.code, alpha:0, link:'/js/dist/arbor-v0.92.zip'},
-                     ".tar.gz":{color:CLR.code, alpha:0, link:'/js/dist/arbor-v0.92.tar.gz'}
-                    },
-              edges:{
-                "arbor.js":{
-                  demos:{length:.8},
-                  docs:{length:.8},
-                  code:{length:.8}
+        $("#search-btn").on("click", function() {
+
+            var username = "@" + $("#search-input").val();
+
+            $.ajax({
+                url: "followers/",
+                type: 'GET',
+                data: {
+                    user_id: username
                 },
-                demos:{halfviz:{},
-                       atlas:{},
-                       echolalia:{}
-                },
-                docs:{reference:{},
-                      introduction:{}
-                },
-                code:{".zip":{},
-                      ".tar.gz":{},
-                      "github":{}
+                dataType: 'json',
+                cache: false
+
+            }).done(function(data) {
+
+
+                var CLR = {
+                    branch: "#b2b19d",
+                    code: "orange",
+                    doc: "#922E00",
+                    demo: "#a7af00"
                 }
-              }
-            }
+
+                var sys = arbor.ParticleSystem()
+
+                var users = data.users;
+
+                arborData = {
+                    "nodes": {},
+                    "edges": {}
+                };
+
+                arborData.nodes[username] = {
+                    color: "red",
+                    shape: "dot",
+                    alpha: 1
+                };
+                arborData.edges[username] = {};
+
+                for(i in users) {
+                    arborData.nodes[users[i]] = {
+                        color: CLR.branch,
+                        shape: "dot",
+                        alpha: 1
+                    };
+                    arborData.edges[username][users[i]] = {length:0.8};
+                    //arborData.edges[users[i]] = {};
+
+                    //if (i>30) break;
+                }
+
+                console.log(arborData);
+
+                sys.graft(arborData);
+                sys.parameters({
+                    stiffness: 0,
+                    repulsion: 100,
+                    gravity: true,
+                    dt: 0.015,
+                    friction: 0.5
+                })
+                sys.renderer = Renderer("#sitemap")
+
+                var nav = Nav("#nav")
+                $(sys.renderer).bind('navigate', nav.navigate)
+                $(nav).bind('mode', sys.renderer.switchMode)
+                nav.init()
+
+            });
+        });
+
+    });
 
 
-            var sys = arbor.ParticleSystem()
-            sys.parameters({stiffness:900, repulsion:2000, gravity:true, dt:0.015})
-            sys.renderer = Renderer("#sitemap")
-            sys.graft(theUI)
-            
-            var nav = Nav("#nav")
-            $(sys.renderer).bind('navigate', nav.navigate)
-            $(nav).bind('mode', sys.renderer.switchMode)
-            nav.init()
-          })
-
-
-    }
-);
+});
