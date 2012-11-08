@@ -1,0 +1,8 @@
+{
+    "domain": "http://localhost",
+    "port": 3000,
+    "session_secret": "secret",
+    "session_cookie": "session_your_cookie_name",
+    "appnet_consumer_key": "Tj7Qm8WpFvkHEcRLrRGRCH5SjKq6TUZ6",
+    "appnet_consumer_secret": "xAvbtT8jsut86SXtQpWZPSMNx2Csrn4c"
+}
