@@ -14,7 +14,6 @@ var express = require('express')
   , settings = require('./settings')(app, configurations, express);
 
 nconf.argv().env().file({ file: 'local.json' });
-console.log(nconf);
 
 passport.serializeUser(function(user, done) {
   done(null, user);

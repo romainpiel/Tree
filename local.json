@@ -1,5 +1,5 @@
 {
-    "domain": "http://localhost",
+    "domain": "http://treeforapp.herokuapp.com",
     "port": 3000,
     "session_secret": "secret",
     "session_cookie": "session_your_cookie_name",
