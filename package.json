@@ -8,7 +8,11 @@
   "dependencies": {
     "express": "3.0.1",
     "jade": "*",
-    "less-middleware": "*"
+    "less-middleware": "*",
+    "request": "git://github.com/mikeal/request.git",
+    "nconf": "git://github.com/flatiron/nconf.git",
+    "passport": ">= 0.1.12",
+    "passport-appdotnet": ">= 0.1.1"
   },
   "engines": {
     "node": "0.8.x",

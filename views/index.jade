@@ -1,4 +1,7 @@
 extends layout
 
 block content
-  canvas(id='sitemap')
+    if session
+        canvas(id='sitemap')
+    else
+        a(href='/auth/appdotnet', id='login') Log in
