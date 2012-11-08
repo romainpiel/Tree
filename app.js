@@ -50,4 +50,4 @@ var isLoggedIn = function(req, res, next) {
 require('./routes')(app, isLoggedIn);
 require('./routes/auth')(app, passport);
 
-server.listen(nconf.get('port'));
+server.listen(process.env.PORT || nconf.get('port'));
