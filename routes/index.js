@@ -12,12 +12,12 @@ module.exports = function(app, isLoggedIn) {
     });
 
     app.get('/followers', isLoggedIn, function(req, res) {
-        appdotnet.followers(req, function(err, users) {
+        appdotnet.user(req, function(err, result) {
           if (err) {
             res.status(500);
             res.json({ 'error': 'error retrieving followers' });
           } else {
-            res.json({ users: users.data });
+            res.json(result);
           }
         });
     });

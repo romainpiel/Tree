@@ -31,14 +31,18 @@ define([
 
             add: function(username, users) {
 
-                this.sigInst.addNode(username, {
-                    label: username, 
-                    color: 'rgb('+Math.round(Math.random()*256)+','+
-                        Math.round(Math.random()*256)+','+
-                        Math.round(Math.random()*256)+')',
-                    x: Math.random(),
-                    y: Math.random()
-                });
+                try {
+                    this.sigInst.addNode(username, {
+                        label: username, 
+                        color: 'rgb('+Math.round(Math.random()*256)+','+
+                            Math.round(Math.random()*256)+','+
+                            Math.round(Math.random()*256)+')',
+                        x: Math.random(),
+                        y: Math.random()
+                    });
+                } catch(e) {
+
+                }
 
                 for (i in users) {
 
