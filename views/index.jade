@@ -2,6 +2,9 @@ extends layout
 
 block content
     if session
-        canvas(id='sitemap')
+        div#search-container
+            input#search-input
+            button#search-btn Search
+        div#sig
     else
-        a(href='/auth/appdotnet', id='login') Log in
+        a(href='/auth/appdotnet') Log in
