@@ -2,8 +2,9 @@ extends layout
 
 block content
     if session
-        input#search-input
-        button#search-btn Search
-        canvas#sitemap
+        div#search-container
+            input#search-input
+            button#search-btn Search
+        div#sig
     else
         a(href='/auth/appdotnet') Log in

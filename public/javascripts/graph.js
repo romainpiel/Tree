@@ -1,65 +1,49 @@
 define([
-    "jquery",
-    "arborjs/renderer", 
-    "arborjs/nav", 
-    "arborjs/arbor"
-], function($, Renderer, Nav) {
+    "sigma.min"
+], function(sigma) {
 
     var Graph = function() {
 
-        var arborData = {
-            "nodes": {},
-            "edges": {}
-        };
-
         var that = {
-            build: function(username, users) {
-                var CLR = {
-                    branch: "#b2b19d",
-                    code: "orange",
-                    doc: "#922E00",
-                    demo: "#a7af00"
+
+            sigInst: null,
+
+            init: function() {
+                var sigRoot = document.getElementById('sig');
+                this.sigInst = sigma.init(sigRoot);
+            },
+
+            add: function(username, users) {
+
+                this.sigInst.addNode(username, {
+                    label: username, 
+                    color: 'rgb('+Math.round(Math.random()*256)+','+
+                        Math.round(Math.random()*256)+','+
+                        Math.round(Math.random()*256)+')',
+                    x: Math.random(),
+                    y: Math.random()
+                });
+
+                for (i in users) {
+
+                    try {
+                        this.sigInst.addNode(users[i], {
+                            label: users[i], 
+                            color: 'rgb('+Math.round(Math.random()*256)+','+
+                                Math.round(Math.random()*256)+','+
+                                Math.round(Math.random()*256)+')',
+                            x: Math.random(),
+                            y: Math.random()
+                        });
+                    } catch(e) {
+
+                    }
+                    
+                    this.sigInst.addEdge(username+"_"+users[i], username, users[i]);
                 }
 
-                var sys = arbor.ParticleSystem()
+                this.sigInst.draw();
 
-                arborData = {
-                    "nodes": {},
-                    "edges": {}
-                };
-
-                arborData.nodes[username] = {
-                    color: "red",
-                    shape: "dot",
-                    alpha: 1
-                };
-                arborData.edges[username] = {};
-
-                for(i in users) {
-                    arborData.nodes[users[i]] = {
-                        color: CLR.branch,
-                        shape: "dot",
-                        alpha: 1
-                    };
-                    arborData.edges[username][users[i]] = {length:0.8};
-                }
-
-                console.log(arborData);
-
-                sys.graft(arborData);
-                sys.parameters({
-                    stiffness: 0,
-                    repulsion: 100,
-                    gravity: true,
-                    dt: 0.015,
-                    friction: 0.5
-                })
-                sys.renderer = Renderer("#sitemap")
-
-                var nav = Nav("#nav")
-                $(sys.renderer).bind('navigate', nav.navigate)
-                $(nav).bind('mode', sys.renderer.switchMode)
-                nav.init()
             }
         }
         return that;
