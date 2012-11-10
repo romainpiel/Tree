@@ -6,13 +6,43 @@ html, body {
     font: 400 14px/1.6 "Open Sans", sans-serif;
 }
 
-div#search-container {
+h1 {
+    font: 300 60px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input::-webkit-input-placeholder {
+    color: #333;
+}
+
+div.sidebar {
     z-index: 20;
     position: absolute;
+    background-color: rgba(0,0,0,.5);
+    width: 20%;
+    height: 100%;
+    padding: 10px 20px;
+
+    h1 {
+        color: #555;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    input, input:focus {
+        background: transparent;
+        border-color: #555;
+        color: #08c;
+    }
+
+    button.btn {
+        background: transparent;
+        border-color: #555;
+        color: #555;
+        text-shadow: none;  
+    }
 }
 
 #sig {
-    background-color: black;
+    background-color: #111;
     z-index: 10;
     position: absolute;
     top: 0;
@@ -30,7 +60,6 @@ div#search-container {
 .container-fluid {
     h1 {
         margin-top: 180px;
-        font: 400 60px "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: #353535;
     }
     p.subtitle {
