@@ -1,10 +1,22 @@
 extends layout
 
 block content
-    if session
-        div#search-container
-            input#search-input
-            button#search-btn Search
-        div#sig
-    else
-        a(href='/auth/appdotnet') Log in
+    div#wrapper
+        div.container-fluid
+            div.row-fluid
+                h1 Tree
+            div.row-fluid
+                div.span6
+                    p.subtitle 
+                        span Vizualize your 
+                        a(href='http://alpha.app.net') App.net 
+                        span followers in a cool graph and compare it with other users
+            div.row-fluid.block
+                p
+                    span This app was made by 
+                    a(href='http://alpha.app.net/rp') @rp
+            div.row-fluid.block
+                div.span6.links
+                    a(href='/graph') Get started
+                    span  - 
+                    a(href='https://github.com/RomainPiel/Tree') Github project

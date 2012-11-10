@@ -1,0 +1,10 @@
+extends layout
+
+block append scripts
+    script(src='/javascripts/lib/require.js', data-main='javascripts/main.js')    
+
+block content
+    div#search-container
+        input#search-input
+        button#search-btn Search
+    div#sig
