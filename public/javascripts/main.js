@@ -21,16 +21,21 @@ function($, Api, Graph) {
 
     $(function() {
 
-        $("#search-btn").on("click", function() {
-
-            var username = "@" + $("#search-input").val();
-
-            api.getFollowers(username, function(data) {
-                graph.add(data.userid, data.followers);
-            });
+        $("#search-btn").on("click", getUser);
+        $("#search-input").on("keypress", function(e) {
+            if ((e.keyCode || e.which) == 13){
+                getUser();
+            }
         });
 
     });
 
+    function getUser() {
+        var username = "@" + $("#search-input").val();
+
+        api.getUser(username, function(data) {
+            graph.add(data.userid, data.username, data.followers);
+        });
+    }
 
 });

@@ -8,6 +8,8 @@ define([
 
             sigInst: null,
 
+            forceAtlas2Started: false,
+
             init: function() {
                 var sigRoot = document.getElementById('sig');
                 this.sigInst = sigma.init(sigRoot);
@@ -21,46 +23,64 @@ define([
                     defaultEdgeType: 'curve'
                 }).graphProperties({
                     minNodeSize: 0.5,
-                    maxNodeSize: 1,
+                    maxNodeSize: 6,
                     minEdgeSize: 0.5,
                     maxEdgeSize: 1
                 }).mouseProperties({
                     maxRatio: 32
+                }).configProperties({
+                    auto: 0    // don't hide edges on animations
                 });
             },
 
-            add: function(username, users) {
+            add: function(userid, username, users) {
 
-                this.addNode(username);
+                this.addNode(userid, "@"+username, true);
 
                 for (i in users) {
-                    this.addNode(users[i]);
-                    this.sigInst.addEdge(username+"_"+users[i], username, users[i]);
+                    this.addNode(users[i], users[i]);
+                    this.addEdge(users[i], userid);
                 }
 
                 this.sigInst.draw();
 
-                this.sigInst.startForceAtlas2();
-                var that = this;
-                // setTimeout(function() {
-                //     that.sigInst.stopForceAtlas2();
-                // }, 2000);
+                // this needs to be started only once but it doesn't work when no point
+                if (!this.forceAtlas2Started && users.length > 0) {
+                    this.sigInst.startForceAtlas2();
+                    this.forceAtlas2Started = true;
+                }
 
             },
 
-            addNode: function(id) {
+            addNode: function(id, label, central) {
+
+                if (central) {
+                    this.sigInst.dropNode(id)
+                }
+
                 try {
-                    this.sigInst.addNode(id, {
-                        label: id, 
+                    var properties = {
+                        label: label, 
                         color: 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+')',
                         x: Math.random(),
                         y: Math.random()
-                    });
+                    };
+
+                    if (central) {
+                        properties.color = "white";
+                        properties.size = 6;
+                    }
+
+                    this.sigInst.addNode(id, properties);
                 } catch(e) {
 
                 }
+            },
+
+            addEdge: function(from, to) {
+                this.sigInst.addEdge(from+"_"+to, from, to);
             }
         }
         return that;

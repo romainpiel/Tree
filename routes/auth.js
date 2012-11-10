@@ -13,7 +13,7 @@ module.exports = function(app, passport) {
   app.get('/auth/appdotnet/callback',
     passport.authenticate('appdotnet', { failureRedirect: '/' }),
     function(req, res) {
-      res.redirect('/');
+      res.redirect('/graph');
     }
   );
 

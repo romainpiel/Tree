@@ -6,16 +6,26 @@ module.exports = function(app, isLoggedIn) {
     app.get('/', function(req, res) {
         res.render('index', 
             { 
-                title: "Tree",
-                session: req.session.passport.user? req.session.passport : false
+                title: "Tree"
             });
     });
 
-    app.get('/followers', isLoggedIn, function(req, res) {
+    app.get('/graph', function(req, res) {
+        if (req.session.passport.user) {
+            res.render('graph', 
+                { 
+                    title: "Tree",
+                });
+        } else {
+            res.redirect("/auth/appdotnet");
+        }
+    });
+
+    app.get('/user', isLoggedIn, function(req, res) {
         appdotnet.user(req, function(err, result) {
           if (err) {
             res.status(500);
-            res.json({ 'error': 'error retrieving followers' });
+            res.json({ 'error': 'error retrieving user' });
           } else {
             res.json(result);
           }
