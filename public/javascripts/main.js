@@ -26,7 +26,7 @@ function($, Api, Graph) {
             var username = "@" + $("#search-input").val();
 
             api.getFollowers(username, function(data) {
-                graph.add(username, data.users);
+                graph.add(data.userid, data.followers);
             });
         });
 
