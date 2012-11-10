@@ -6,7 +6,8 @@ block append scripts
 block content
     div.sidebar
         div.row-fluid
-            h1 Tree
+            a(href= "/")
+                h1 Tree
             p Search users using the input below. This will generate a graph representing the user and his followers. Search multiple users for a better result.
         div.row-fluid.input-append
             input#search-input.span8(type= "text", placeholder= "Username")
