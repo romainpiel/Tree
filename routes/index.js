@@ -11,11 +11,11 @@ module.exports = function(app, isLoggedIn) {
             });
     });
 
-    app.get('/followers', isLoggedIn, function(req, res) {
+    app.get('/user', isLoggedIn, function(req, res) {
         appdotnet.user(req, function(err, result) {
           if (err) {
             res.status(500);
-            res.json({ 'error': 'error retrieving followers' });
+            res.json({ 'error': 'error retrieving user' });
           } else {
             res.json(result);
           }

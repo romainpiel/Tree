@@ -6,9 +6,9 @@ define([
 
         var that = {
 
-            getFollowers: function(username, onComplete) {
+            getUser: function(username, onComplete) {
                 $.ajax({
-                    url: "followers/",
+                    url: "user/",
                     type: 'GET',
                     data: {
                         user_id: username
