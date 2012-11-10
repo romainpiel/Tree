@@ -15,7 +15,7 @@ h1 {
   font: 300 60px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 input::-webkit-input-placeholder {
-  color: #333;
+  color: #444;
 }
 div.sidebar {
   z-index: 20;
@@ -25,21 +25,25 @@ div.sidebar {
   height: 100%;
   min-width: 300px;
   padding: 10px 20px;
+  color: #777;
 }
 div.sidebar h1 {
-  color: #555;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: #777;
+}
+div.sidebar p {
+  font-size: 15px;
 }
 div.sidebar input,
 div.sidebar input:focus {
   background: transparent;
-  border-color: #555;
+  border-color: #777;
   color: #08c;
 }
 div.sidebar button.btn {
   background: transparent;
-  border-color: #555;
-  color: #555;
+  border-color: #777;
+  color: #777;
   text-shadow: none;
 }
 #sig {
@@ -64,7 +68,7 @@ div.sidebar button.btn {
 .container-fluid p.subtitle span {
   font: 100 50px "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 0.8;
-  color: #CECECE;
+  color: #BEBEBE;
   text-decoration: none;
 }
 .container-fluid div.block {
