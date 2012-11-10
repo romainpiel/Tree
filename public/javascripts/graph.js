@@ -22,7 +22,7 @@ define([
                 }).graphProperties({
                     minNodeSize: 0.5,
                     maxNodeSize: 1,
-                    minEdgeSize: 1,
+                    minEdgeSize: 0.5,
                     maxEdgeSize: 1
                 }).mouseProperties({
                     maxRatio: 32
@@ -31,9 +31,21 @@ define([
 
             add: function(username, users) {
 
+                this.addNode(username);
+
+                for (i in users) {
+                    this.addNode(users[i]);
+                    this.sigInst.addEdge(username+"_"+users[i], username, users[i]);
+                }
+
+                this.sigInst.draw();
+
+            },
+
+            addNode: function(id) {
                 try {
-                    this.sigInst.addNode(username, {
-                        label: username, 
+                    this.sigInst.addNode(id, {
+                        label: id, 
                         color: 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+')',
@@ -43,27 +55,6 @@ define([
                 } catch(e) {
 
                 }
-
-                for (i in users) {
-
-                    try {
-                        this.sigInst.addNode(users[i], {
-                            label: users[i], 
-                            color: 'rgb('+Math.round(Math.random()*256)+','+
-                                Math.round(Math.random()*256)+','+
-                                Math.round(Math.random()*256)+')',
-                            x: Math.random(),
-                            y: Math.random()
-                        });
-                    } catch(e) {
-
-                    }
-                    
-                    this.sigInst.addEdge(username+"_"+users[i], username, users[i]);
-                }
-
-                this.sigInst.draw();
-
             }
         }
         return that;
