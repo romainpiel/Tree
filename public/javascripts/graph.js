@@ -39,7 +39,7 @@ define([
 
                 for (i in users) {
                     this.addNode(users[i]);
-                    this.sigInst.addEdge(username+"_"+users[i], username, users[i]);
+                    this.addEdge(users[i], username);
                 }
 
                 this.sigInst.draw();
@@ -65,6 +65,10 @@ define([
                 } catch(e) {
 
                 }
+            },
+
+            addEdge: function(from, to) {
+                this.sigInst.addEdge(from+"_"+to, from, to);
             }
         }
         return that;
