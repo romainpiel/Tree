@@ -1,5 +1,5 @@
 define([
-    "sigma.min"
+    "sigma.forceatlas2"
 ], function(sigma) {
 
     var Graph = function() {
@@ -39,6 +39,12 @@ define([
                 }
 
                 this.sigInst.draw();
+
+                this.sigInst.startForceAtlas2();
+                var that = this;
+                // setTimeout(function() {
+                //     that.sigInst.stopForceAtlas2();
+                // }, 2000);
 
             },
 
