@@ -23,7 +23,7 @@ define([
                     defaultEdgeType: 'curve'
                 }).graphProperties({
                     minNodeSize: 0.5,
-                    maxNodeSize: 1,
+                    maxNodeSize: 6,
                     minEdgeSize: 0.5,
                     maxEdgeSize: 1
                 }).mouseProperties({
@@ -33,13 +33,13 @@ define([
                 });
             },
 
-            add: function(username, users) {
+            add: function(userid, username, users) {
 
-                this.addNode(username);
+                this.addNode(userid, "@"+username, true);
 
                 for (i in users) {
-                    this.addNode(users[i]);
-                    this.addEdge(users[i], username);
+                    this.addNode(users[i], users[i]);
+                    this.addEdge(users[i], userid);
                 }
 
                 this.sigInst.draw();
@@ -52,16 +52,28 @@ define([
 
             },
 
-            addNode: function(id) {
+            addNode: function(id, label, central) {
+
+                if (central) {
+                    this.sigInst.dropNode(id)
+                }
+
                 try {
-                    this.sigInst.addNode(id, {
-                        label: id, 
+                    var properties = {
+                        label: label, 
                         color: 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+')',
                         x: Math.random(),
                         y: Math.random()
-                    });
+                    };
+
+                    if (central) {
+                        properties.color = "white";
+                        properties.size = 6;
+                    }
+
+                    this.sigInst.addNode(id, properties);
                 } catch(e) {
 
                 }
