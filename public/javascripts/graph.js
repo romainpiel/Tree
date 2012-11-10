@@ -8,6 +8,8 @@ define([
 
             sigInst: null,
 
+            forceAtlas2Started: false,
+
             init: function() {
                 var sigRoot = document.getElementById('sig');
                 this.sigInst = sigma.init(sigRoot);
@@ -26,6 +28,8 @@ define([
                     maxEdgeSize: 1
                 }).mouseProperties({
                     maxRatio: 32
+                }).configProperties({
+                    auto: 0    // don't hide edges on animations
                 });
             },
 
@@ -40,11 +44,11 @@ define([
 
                 this.sigInst.draw();
 
-                this.sigInst.startForceAtlas2();
-                var that = this;
-                // setTimeout(function() {
-                //     that.sigInst.stopForceAtlas2();
-                // }, 2000);
+                // this needs to be started only once but it doesn't work when no point
+                if (!this.forceAtlas2Started && users.length > 0) {
+                    this.sigInst.startForceAtlas2();
+                    this.forceAtlas2Started = true;
+                }
 
             },
 
