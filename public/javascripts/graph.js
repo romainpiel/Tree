@@ -10,6 +10,9 @@ define([
 
             forceAtlas2Started: false,
 
+            nodes: {},
+            edges: {},
+
             init: function() {
                 var sigRoot = document.getElementById('sig');
                 this.sigInst = sigma.init(sigRoot);
@@ -41,6 +44,7 @@ define([
                     this.addNode(users[i], users[i]);
                     this.addEdge(users[i], userid);
                 }
+                this.edges[userid] = users;
 
                 this.sigInst.draw();
 
@@ -55,7 +59,7 @@ define([
             addNode: function(id, label, central) {
 
                 if (central) {
-                    this.sigInst.dropNode(id)
+                    this.sigInst.dropNode(id);
                 }
 
                 try {
@@ -75,12 +79,51 @@ define([
 
                     this.sigInst.addNode(id, properties);
                 } catch(e) {
+                }
 
+                if (this.nodes[id]) {
+                    this.nodes[id]++;
+                } else {
+                    this.nodes[id] = 1;
                 }
             },
 
             addEdge: function(from, to) {
                 this.sigInst.addEdge(from+"_"+to, from, to);
+            },
+
+            deleteNode: function(id) {
+
+                this.nodes[id]--;
+                if (this.nodes[id] == 0) {
+                    this.sigInst.dropNode(id);
+                    delete this.nodes[id];
+                } else {
+                    this.sigInst.iterNodes(function(n) {
+                        n.size = 1;
+                        n.color = 'rgb('+Math.round(Math.random()*256)+','+
+                            Math.round(Math.random()*256)+','+
+                            Math.round(Math.random()*256)+')';
+                    }, [id])
+                }
+
+                var edge = this.edges[id],
+                    key;
+                for (i in edge) {
+                    key = edge[i];
+                    this.nodes[key]--;
+                    if (this.nodes[key] == 0) {
+                        this.sigInst.dropNode(key);
+                        delete this.nodes[key];
+                    }
+                }
+
+                delete this.edges[id];
+
+                if (this.forceAtlas2Started && Object.keys(this.nodes).length == 0) {
+                    this.sigInst.stopForceAtlas2();
+                    this.forceAtlas2Started = false;
+                }
             }
         }
         return that;

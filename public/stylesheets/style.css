@@ -32,7 +32,7 @@ div.sidebar h1 {
   color: #777;
 }
 div.sidebar p {
-  font-size: 15px;
+  font-size: 16px;
 }
 div.sidebar input,
 div.sidebar input:focus {
@@ -45,6 +45,15 @@ div.sidebar button.btn {
   border-color: #777;
   color: #777;
   text-shadow: none;
+}
+div.sidebar ul#user-list {
+  margin-top: 10px;
+}
+div.sidebar ul#user-list li {
+  list-style: none;
+}
+div.sidebar ul#user-list li span {
+  padding-left: 10px;
 }
 #sig {
   background-color: #111;

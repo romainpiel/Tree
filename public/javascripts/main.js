@@ -17,25 +17,53 @@ function($, Api, Graph) {
     var api = Api(),
         graph = Graph();
 
-    graph.init();
+    var userListEl,
+        searchInputEl;
 
     $(function() {
 
+        // init dom elements
+        userListEl = $("#user-list");
+        searchInputEl = $("#search-input");
+
+        // init graph
+        graph.init();
+
+        // init events
         $("#search-btn").on("click", getUser);
-        $("#search-input").on("keypress", function(e) {
+        
+        searchInputEl.on("keypress", function(e) {
             if ((e.keyCode || e.which) == 13){
                 getUser();
             }
+        });
+
+        userListEl.find("li a.delete").live("click", function() {
+            deleteUser($(this).closest("li"));
         });
 
     });
 
     function getUser() {
         var username = "@" + $("#search-input").val();
+        api.getUser(username, addUser);
+    }
 
-        api.getUser(username, function(data) {
-            graph.add(data.userid, data.username, data.followers);
-        });
+    function addUser(data) {
+        graph.add(data.userid, data.username, data.followers);
+        
+        userListEl.append(
+            ($("<li></li>").attr("data-user-id", data.userid))
+                .append($("<a class='delete'>&times;</a>"))
+                .append($("<span></span>").text("@" + data.username))
+        );
+
+        searchInputEl.val("");
+    }
+
+    function deleteUser(li) {
+        li.remove();
+        graph.deleteNode(li.attr("data-user-id"));
     }
 
 });
