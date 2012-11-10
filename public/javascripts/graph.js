@@ -116,6 +116,8 @@ define([
                         this.sigInst.dropNode(key);
                         delete this.nodes[key];
                     }
+
+                    this.sigInst.dropEdge(key+"_"+id);
                 }
 
                 delete this.edges[id];
