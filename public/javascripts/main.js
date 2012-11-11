@@ -9,10 +9,18 @@ requirejs.config({
 require(
 [
     "jquery",
+    "utils",
     "api",
     "graph"
 ], 
-function($, Api, Graph) {
+function($, Utils, Api, Graph) {
+
+    var utils = Utils();
+    if (utils.isTouchDevice()) {
+        // don't show the graph on touchable devices
+        window.location = "/";
+        return;
+    }
 
     var api = Api(),
         graph = Graph();

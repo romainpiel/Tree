@@ -70,7 +70,7 @@ div.sidebar ul#user-list li span {
   margin: 0 auto;
 }
 .container-fluid h1 {
-  margin-top: 180px;
+  margin-top: 120px;
   color: #353535;
 }
 .container-fluid p.subtitle a,
@@ -79,9 +79,6 @@ div.sidebar ul#user-list li span {
   line-height: 0.8;
   color: #BEBEBE;
   text-decoration: none;
-}
-.container-fluid div.block {
-  margin-top: 20px;
 }
 .container-fluid div.links {
   text-align: center;

@@ -1,5 +1,8 @@
 extends layout
 
+block append scripts
+    script(src='/javascripts/lib/require.js', data-main='javascripts/index.js')    
+
 block content
     div#wrapper
         div.container-fluid
@@ -17,6 +20,6 @@ block content
                     a(href='http://alpha.app.net/rp') @rp
             div.row-fluid.block
                 div.span6.links
-                    a(href='/graph') Get started
-                    span  - 
+                    a(href='/graph').visible-non-touch Get started
+                    span.visible-non-touch  - 
                     a(href='https://github.com/RomainPiel/Tree') Github project
