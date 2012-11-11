@@ -50,13 +50,15 @@ function($, Api, Graph) {
     }
 
     function addUser(data) {
-        graph.add(data.userid, data.username, data.followers);
-        
-        userListEl.append(
-            ($("<li></li>").attr("data-user-id", data.userid))
-                .append($("<a class='delete'>&times;</a>"))
-                .append($("<span></span>").text("@" + data.username))
-        );
+        if (!graph.hasCentralNode(data.userid)) {
+            graph.add(data.userid, data.username, data.followers);
+            
+            userListEl.append(
+                ($("<li></li>").attr("data-user-id", data.userid))
+                    .append($("<a class='delete'>&times;</a>"))
+                    .append($("<span></span>").text("@" + data.username))
+            );
+        }
 
         searchInputEl.val("");
     }

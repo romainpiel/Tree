@@ -126,6 +126,10 @@ define([
                     this.sigInst.stopForceAtlas2();
                     this.forceAtlas2Started = false;
                 }
+            },
+
+            hasCentralNode: function(id) {
+                return (this.edges[id] != null);
             }
         }
         return that;
