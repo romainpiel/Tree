@@ -425,6 +425,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     linRepulsion: function(c) {
       this.coefficient = c;
       this.apply_nn = function(n1, n2) {
+        if (n1.hidden || n2.hidden) return;
         if(n1.fa2 && n2.fa2)
         {
           // Get the distance
@@ -449,6 +450,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
       }
 
       this.apply_nr = function(n, r) {
+        if (n.hidden) return;
         // Get the distance
         var xDist = n.x - r.config('massCenterX');
         var yDist = n.y - r.config('massCenterY');
@@ -467,6 +469,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
       }
 
       this.apply_g = function(n, g) {
+        if (n.hidden) return;
         // Get the distance
         var xDist = n.x;
         var yDist = n.y;
@@ -947,6 +950,7 @@ sigma.publicPrototype.startForceAtlas2 = function() {
 };
 
 sigma.publicPrototype.stopForceAtlas2 = function() {
+  this.forceatlas2 = null;
   this.removeGenerator('forceatlas2');
 };
 return sigma;

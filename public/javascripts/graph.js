@@ -15,6 +15,7 @@ define([
 
             init: function() {
                 var sigRoot = document.getElementById('sig');
+
                 this.sigInst = sigma.init(sigRoot);
 
                 this.sigInst.drawingProperties({
@@ -57,11 +58,7 @@ define([
             },
 
             addNode: function(id, label, central) {
-
-                if (central) {
-                    this.sigInst.dropNode(id);
-                }
-
+                
                 try {
                     var properties = {
                         label: label, 
@@ -71,14 +68,19 @@ define([
                         x: Math.random(),
                         y: Math.random()
                     };
-
-                    if (central) {
-                        properties.color = "white";
-                        properties.size = 6;
-                    }
-
                     this.sigInst.addNode(id, properties);
                 } catch(e) {
+                    this.sigInst.iterNodes(function(n) {
+                        n.hidden = 0;
+                    }, [id]); 
+                }
+
+                if (central) {
+                    this.sigInst.iterNodes(function(n) {
+                        n.label = label;
+                        n.color = "white";
+                        n.size = 6;
+                    }, [id]); 
                 }
 
                 if (this.nodes[id]) {
@@ -94,9 +96,11 @@ define([
 
             deleteNode: function(id) {
 
+                var nodesToDrop = [];
+
                 this.nodes[id]--;
                 if (this.nodes[id] == 0) {
-                    this.sigInst.dropNode(id);
+                    nodesToDrop.push(id);
                     delete this.nodes[id];
                 } else {
                     this.sigInst.iterNodes(function(n) {
@@ -104,7 +108,7 @@ define([
                         n.color = 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+')';
-                    }, [id])
+                    }, [id]);
                 }
 
                 var edge = this.edges[id],
@@ -113,7 +117,7 @@ define([
                     key = edge[i];
                     this.nodes[key]--;
                     if (this.nodes[key] == 0) {
-                        this.sigInst.dropNode(key);
+                        nodesToDrop.push(key);
                         delete this.nodes[key];
                     }
 
@@ -121,6 +125,14 @@ define([
                 }
 
                 delete this.edges[id];
+
+                this.sigInst.iterNodes(function(n) {
+                    n.hidden = 1;
+                    n.color = 'rgb('+Math.round(Math.random()*256)+','+
+                            Math.round(Math.random()*256)+','+
+                            Math.round(Math.random()*256)+')';
+                    n.size = 1;
+                }, nodesToDrop);
 
                 if (this.forceAtlas2Started && Object.keys(this.nodes).length == 0) {
                     this.sigInst.stopForceAtlas2();
