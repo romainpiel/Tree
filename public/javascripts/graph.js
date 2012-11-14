@@ -96,11 +96,11 @@ define([
 
             deleteNode: function(id) {
 
-                var nodesToDrop = [];
+                var nodesToHide = [];
 
                 this.nodes[id]--;
                 if (this.nodes[id] == 0) {
-                    nodesToDrop.push(id);
+                    nodesToHide.push(id);
                     delete this.nodes[id];
                 } else {
                     this.sigInst.iterNodes(function(n) {
@@ -117,7 +117,7 @@ define([
                     key = edge[i];
                     this.nodes[key]--;
                     if (this.nodes[key] == 0) {
-                        nodesToDrop.push(key);
+                        nodesToHide.push(key);
                         delete this.nodes[key];
                     }
 
@@ -132,7 +132,7 @@ define([
                             Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+')';
                     n.size = 1;
-                }, nodesToDrop);
+                }, nodesToHide);
 
                 if (this.forceAtlas2Started && Object.keys(this.nodes).length == 0) {
                     this.sigInst.stopForceAtlas2();
