@@ -12,6 +12,7 @@ define([
 
             sigInst: null,
 
+            animationEnabled: true,
             forceAtlas2Started: false,
 
             popUp: null,
@@ -58,10 +59,8 @@ define([
                     .bind('outnodes', this.hideNodeInfo)
                     .draw();
 
-                // this needs to be started only once but it doesn't work when no point
-                if (!this.forceAtlas2Started && users.length > 0) {
-                    this.sigInst.startForceAtlas2();
-                    this.forceAtlas2Started = true;
+                if (this.animationEnabled && !this.forceAtlas2Started) {
+                    this.toggleAnimation(true);
                 }
 
             },
@@ -143,10 +142,7 @@ define([
                     n.size = 2;
                 }, nodesToHide);
 
-                if (this.forceAtlas2Started && Object.keys(this.nodes).length == 0) {
-                    this.sigInst.stopForceAtlas2();
-                    this.forceAtlas2Started = false;
-                }
+                this.sigInst.draw();
             },
 
             hasCentralNode: function(id) {
@@ -182,6 +178,16 @@ define([
             hideNodeInfo: function(event) {
                 that.popUp && that.popUp.remove();
                 that.popUp = false;
+            },
+
+            toggleAnimation: function(flag) {
+                if (this.forceAtlas2Started && !flag) {
+                    this.sigInst.stopForceAtlas2();
+                } else if (!this.forceAtlas2Started && flag) {
+                    this.sigInst.startForceAtlas2();
+                }
+                this.animationEnabled = flag;
+                this.forceAtlas2Started = flag;
             }
         }
         return that;

@@ -32,6 +32,7 @@ function($, Utils, Api, Graph) {
         // init dom elements
         userListEl = $("#user-list");
         searchInputEl = $("#search-input");
+        toggleAnimEl = $("#toggle-animation")
 
         // init graph
         graph.init();
@@ -48,6 +49,12 @@ function($, Utils, Api, Graph) {
         userListEl.find("li a.delete").live("click", function() {
             deleteUser($(this).closest("li"));
         });
+
+        toggleAnimEl.on("click", function() {
+            toggleAnimation($(this).is(':checked'));
+        });
+
+        toggleAnimEl.prop("checked", true);
 
     });
 
@@ -72,6 +79,8 @@ function($, Utils, Api, Graph) {
         graph.deleteNode(li.attr("data-user-id"));
     }
 
-    
+    function toggleAnimation(flag) {
+        graph.toggleAnimation(flag);
+    }
 
 });

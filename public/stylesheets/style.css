@@ -55,6 +55,9 @@ div.sidebar ul#user-list li {
 div.sidebar ul#user-list li span {
   padding-left: 10px;
 }
+div.sidebar label.checkbox {
+  padding: 0 30px;
+}
 #sig {
   background-color: #111;
   z-index: 10;
