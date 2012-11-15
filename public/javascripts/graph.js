@@ -32,7 +32,7 @@ define([
                     labelThreshold: 6,
                     defaultEdgeType: 'curve'
                 }).graphProperties({
-                    minNodeSize: 0.5,
+                    minNodeSize: 2,
                     maxNodeSize: 6,
                     minEdgeSize: 0.5,
                     maxEdgeSize: 1
@@ -113,7 +113,7 @@ define([
                     delete this.nodes[id];
                 } else {
                     this.sigInst.iterNodes(function(n) {
-                        n.size = 1;
+                        n.size = 2;
                         n.color = 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+')';
@@ -140,7 +140,7 @@ define([
                     n.color = 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+')';
-                    n.size = 1;
+                    n.size = 2;
                 }, nodesToHide);
 
                 if (this.forceAtlas2Started && Object.keys(this.nodes).length == 0) {
