@@ -1,6 +1,10 @@
 define([
-    "sigma.forceatlas2"
-], function(sigma) {
+    "jquery",
+    "sigma.forceatlas2",
+    "api"
+], function($, sigma, Api) {
+
+    var api = Api();
 
     var Graph = function() {
 
@@ -9,6 +13,8 @@ define([
             sigInst: null,
 
             forceAtlas2Started: false,
+
+            popUp: null,
 
             nodes: {},
             edges: {},
@@ -47,7 +53,10 @@ define([
                 }
                 this.edges[userid] = users;
 
-                this.sigInst.draw();
+                this.sigInst
+                    .bind('overnodes', this.showNodeInfo)
+                    .bind('outnodes', this.hideNodeInfo)
+                    .draw();
 
                 // this needs to be started only once but it doesn't work when no point
                 if (!this.forceAtlas2Started && users.length > 0) {
@@ -142,6 +151,37 @@ define([
 
             hasCentralNode: function(id) {
                 return (this.edges[id] != null);
+            },
+
+            showNodeInfo: function(event) {
+                that.popUp && that.popUp.remove();
+
+                var node;
+                that.sigInst.iterNodes(function(n) {
+                    node = n;
+                }, [event.content[0]]);
+
+                that.popUp = $('<img></img>')
+                    .attr('id', 'node-info' + that.sigInst.getID())
+                    .attr('src', api.getAvatar(node.label))
+                    .css({
+                        'display': 'inline-block',
+                        'border-radius': 3,
+                        'padding': 5,
+                        'background': '#fff',
+                        'color': '#000',
+                        'box-shadow': '0 0 4px #666',
+                        'position': 'absolute',
+                        'left': node.displayX,
+                        'top': node.displayY + 15
+                    });
+
+                $('#sig').append(that.popUp);
+            },
+
+            hideNodeInfo: function(event) {
+                that.popUp && that.popUp.remove();
+                that.popUp = false;
             }
         }
         return that;

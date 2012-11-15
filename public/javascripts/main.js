@@ -1,6 +1,6 @@
 requirejs.config({
     paths: {
-        jquery: 'lib/jquery-1.8.2.min'    
+        jquery: 'lib/jquery-1.8.2.min'
     }
 });
 
@@ -8,15 +8,15 @@ requirejs.config({
 // Load the application.
 require(
 [
-    "jquery",
-    "utils",
-    "api",
+    "jquery", 
+    "utils", 
+    "api", 
     "graph"
 ], 
 function($, Utils, Api, Graph) {
 
     var utils = Utils();
-    if (utils.isTouchDevice()) {
+    if(utils.isTouchDevice()) {
         // don't show the graph on touchable devices
         window.location = "/";
         return;
@@ -25,8 +25,7 @@ function($, Utils, Api, Graph) {
     var api = Api(),
         graph = Graph();
 
-    var userListEl,
-        searchInputEl;
+    var userListEl, searchInputEl;
 
     $(function() {
 
@@ -39,9 +38,9 @@ function($, Utils, Api, Graph) {
 
         // init events
         $("#search-btn").on("click", getUser);
-        
+
         searchInputEl.on("keypress", function(e) {
-            if ((e.keyCode || e.which) == 13){
+            if((e.keyCode || e.which) == 13) {
                 getUser();
             }
         });
@@ -58,14 +57,11 @@ function($, Utils, Api, Graph) {
     }
 
     function addUser(data) {
-        if (!graph.hasCentralNode(data.userid)) {
+        if(!graph.hasCentralNode(data.userid)) {
             graph.add(data.userid, data.username, data.followers);
-            
+
             userListEl.append(
-                ($("<li></li>").attr("data-user-id", data.userid))
-                    .append($("<a class='delete'>&times;</a>"))
-                    .append($("<span></span>").text("@" + data.username))
-            );
+            ($("<li></li>").attr("data-user-id", data.userid)).append($("<a class='delete'>&times;</a>")).append($("<span></span>").text("@" + data.username)));
         }
 
         searchInputEl.val("");
@@ -75,5 +71,7 @@ function($, Utils, Api, Graph) {
         li.remove();
         graph.deleteNode(li.attr("data-user-id"));
     }
+
+    
 
 });
