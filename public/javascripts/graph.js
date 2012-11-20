@@ -62,6 +62,7 @@ define([
                     .bind('outnodes', hideNodeInfo)
                     .draw();
 
+                // forceatlas2 can't be started before, it will crash if there's no visible nodes
                 if (animationEnabled && !forceAtlas2Started) {
                     this.toggleAnimation(true);
                 }
@@ -109,6 +110,12 @@ define([
                 }, nodesToHide);
 
                 sigInst.draw();
+
+                // stop forceatlas2 if no nodes. forceatlas2 will crash if there's no visible nodes
+                if (forceAtlas2Started && Object.keys(nodes).length == 0) {
+                    sigInst.stopForceAtlas2();
+                    forceAtlas2Started = false;
+                }
             },
 
             toggleAnimation: function(flag) {
