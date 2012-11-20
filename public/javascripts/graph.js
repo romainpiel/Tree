@@ -16,6 +16,7 @@ define([
             nodes = {},
             edges = {};
 
+        ///// PUBLIC FUNCTIONS //////
         var that = {
 
             init: function() {
