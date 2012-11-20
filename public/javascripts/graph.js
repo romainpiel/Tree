@@ -4,28 +4,26 @@ define([
     "api"
 ], function($, sigma, Api) {
 
-    var api = Api();
-
     var Graph = function() {
 
+        var sigInst = null,
+
+            animationEnabled = true,
+            forceAtlas2Started = false,
+
+            popUp = null,
+
+            nodes = {},
+            edges = {};
+
         var that = {
-
-            sigInst: null,
-
-            animationEnabled: true,
-            forceAtlas2Started: false,
-
-            popUp: null,
-
-            nodes: {},
-            edges: {},
 
             init: function() {
                 var sigRoot = document.getElementById('sig');
 
-                this.sigInst = sigma.init(sigRoot);
+                sigInst = sigma.init(sigRoot);
 
-                this.sigInst.drawingProperties({
+                sigInst.drawingProperties({
                     defaultLabelColor: '#fff',
                     defaultLabelSize: 14,
                     defaultLabelBGColor: '#fff',
@@ -44,74 +42,41 @@ define([
                 });
             },
 
+            hasCentralNode: function(id) {
+                return (edges[id] != null);
+            },
+
             add: function(userid, username, users) {
 
-                this.addNode(userid, "@"+username, true);
+                addNode(userid, "@"+username, true);
 
                 for (i in users) {
-                    this.addNode(users[i], users[i]);
-                    this.addEdge(users[i], userid);
+                    addNode(users[i], users[i]);
+                    addEdge(users[i], userid);
                 }
-                this.edges[userid] = users;
+                edges[userid] = users;
 
-                this.sigInst
-                    .bind('overnodes', this.showNodeInfo)
-                    .bind('outnodes', this.hideNodeInfo)
+                sigInst
+                    .bind('overnodes', showNodeInfo)
+                    .bind('outnodes', hideNodeInfo)
                     .draw();
 
-                if (this.animationEnabled && !this.forceAtlas2Started) {
+                if (animationEnabled && !forceAtlas2Started) {
                     this.toggleAnimation(true);
                 }
 
             },
 
-            addNode: function(id, label, central) {
-                
-                try {
-                    var properties = {
-                        label: label, 
-                        color: 'rgb('+Math.round(Math.random()*256)+','+
-                            Math.round(Math.random()*256)+','+
-                            Math.round(Math.random()*256)+')',
-                        x: Math.random(),
-                        y: Math.random()
-                    };
-                    this.sigInst.addNode(id, properties);
-                } catch(e) {
-                    this.sigInst.iterNodes(function(n) {
-                        n.hidden = 0;
-                    }, [id]); 
-                }
-
-                if (central) {
-                    this.sigInst.iterNodes(function(n) {
-                        n.label = label;
-                        n.color = "white";
-                        n.size = 6;
-                    }, [id]); 
-                }
-
-                if (this.nodes[id]) {
-                    this.nodes[id]++;
-                } else {
-                    this.nodes[id] = 1;
-                }
-            },
-
-            addEdge: function(from, to) {
-                this.sigInst.addEdge(from+"_"+to, from, to);
-            },
-
-            deleteNode: function(id) {
+            drop: function(id) {
 
                 var nodesToHide = [];
 
-                this.nodes[id]--;
-                if (this.nodes[id] == 0) {
+                nodes[id]--;
+                if (nodes[id] == 0) {
                     nodesToHide.push(id);
-                    delete this.nodes[id];
+                    delete nodes[id];
                 } else {
-                    this.sigInst.iterNodes(function(n) {
+                    sigInst.iterNodes(function(n) {
                         n.size = 2;
                         n.color = 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
@@ -119,22 +84,22 @@ define([
                     }, [id]);
                 }
 
-                var edge = this.edges[id],
+                var edge = edges[id],
                     key;
                 for (i in edge) {
                     key = edge[i];
-                    this.nodes[key]--;
-                    if (this.nodes[key] == 0) {
+                    nodes[key]--;
+                    if (nodes[key] == 0) {
                         nodesToHide.push(key);
-                        delete this.nodes[key];
+                        delete nodes[key];
                     }
 
-                    this.sigInst.dropEdge(key+"_"+id);
+                    sigInst.dropEdge(key+"_"+id);
                 }
 
-                delete this.edges[id];
+                delete edges[id];
 
-                this.sigInst.iterNodes(function(n) {
+                sigInst.iterNodes(function(n) {
                     n.hidden = 1;
                     n.color = 'rgb('+Math.round(Math.random()*256)+','+
                             Math.round(Math.random()*256)+','+
@@ -142,55 +107,90 @@ define([
                     n.size = 2;
                 }, nodesToHide);
 
-                this.sigInst.draw();
-            },
-
-            hasCentralNode: function(id) {
-                return (this.edges[id] != null);
-            },
-
-            showNodeInfo: function(event) {
-                that.popUp && that.popUp.remove();
-
-                var node;
-                that.sigInst.iterNodes(function(n) {
-                    node = n;
-                }, [event.content[0]]);
-
-                that.popUp = $('<img></img>')
-                    .attr('id', 'node-info' + that.sigInst.getID())
-                    .attr('src', api.getAvatar(node.label))
-                    .css({
-                        'display': 'inline-block',
-                        'border-radius': 3,
-                        'padding': 5,
-                        'background': '#fff',
-                        'color': '#000',
-                        'box-shadow': '0 0 4px #666',
-                        'position': 'absolute',
-                        'left': node.displayX,
-                        'top': node.displayY + 15
-                    });
-
-                $('#sig').append(that.popUp);
-            },
-
-            hideNodeInfo: function(event) {
-                that.popUp && that.popUp.remove();
-                that.popUp = false;
+                sigInst.draw();
             },
 
             toggleAnimation: function(flag) {
-                if (this.forceAtlas2Started && !flag) {
-                    this.sigInst.stopForceAtlas2();
-                } else if (!this.forceAtlas2Started && flag) {
-                    this.sigInst.startForceAtlas2();
+                if (forceAtlas2Started && !flag) {
+                    sigInst.stopForceAtlas2();
+                } else if (!forceAtlas2Started && flag) {
+                    sigInst.startForceAtlas2();
                 }
-                this.animationEnabled = flag;
-                this.forceAtlas2Started = flag;
+                animationEnabled = flag;
+                forceAtlas2Started = flag;
             }
         }
-        return that;
+
+        ////// PRIVATE FUNCTIONS ////////////
+        function addNode(id, label, central) {
+                
+            try {
+                var properties = {
+                    label: label, 
+                    color: 'rgb('+Math.round(Math.random()*256)+','+
+                        Math.round(Math.random()*256)+','+
+                        Math.round(Math.random()*256)+')',
+                    x: Math.random(),
+                    y: Math.random()
+                };
+                sigInst.addNode(id, properties);
+            } catch(e) {
+                sigInst.iterNodes(function(n) {
+                    n.hidden = 0;
+                }, [id]); 
+            }
+
+            if (central) {
+                sigInst.iterNodes(function(n) {
+                    n.label = label;
+                    n.color = "white";
+                    n.size = 6;
+                }, [id]); 
+            }
+
+            if (nodes[id]) {
+                nodes[id]++;
+            } else {
+                nodes[id] = 1;
+            }
+        }
+
+        function addEdge(from, to) {
+            sigInst.addEdge(from+"_"+to, from, to);
+        }
+
+        function showNodeInfo(event) {
+            popUp && popUp.remove();
+
+            var node;
+            sigInst.iterNodes(function(n) {
+                node = n;
+            }, [event.content[0]]);
+
+            popUp = $('<img></img>')
+                .attr('id', 'node-info' + sigInst.getID())
+                .attr('src', Api.getAvatar(node.label))
+                .css({
+                    'display': 'inline-block',
+                    'border-radius': 3,
+                    'padding': 5,
+                    'background': '#fff',
+                    'color': '#000',
+                    'box-shadow': '0 0 4px #666',
+                    'position': 'absolute',
+                    'left': node.displayX,
+                    'top': node.displayY + 15
+                });
+
+            $('#sig').append(popUp);
+        }
+
+        function hideNodeInfo(event) {
+            popUp && popUp.remove();
+            popUp = false;
+        }
+
+        return $.extend({}, this, that);
     }
 
     return Graph;

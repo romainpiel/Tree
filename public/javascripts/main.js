@@ -22,8 +22,7 @@ function($, Utils, Api, Graph) {
         return;
     }
 
-    var api = Api(),
-        graph = Graph();
+    var graph = new Graph();
 
     var userListEl, searchInputEl;
 
@@ -60,7 +59,7 @@ function($, Utils, Api, Graph) {
 
     function getUser() {
         var username = "@" + $("#search-input").val();
-        api.getUser(username, addUser);
+        Api.getUser(username, addUser);
     }
 
     function addUser(data) {
@@ -76,7 +75,7 @@ function($, Utils, Api, Graph) {
 
     function deleteUser(li) {
         li.remove();
-        graph.deleteNode(li.attr("data-user-id"));
+        graph.drop(li.attr("data-user-id"));
     }
 
     function toggleAnimation(flag) {

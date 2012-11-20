@@ -2,30 +2,28 @@ define([
     "jquery"
 ], function($) {
 
-    var Api = function() {
+    var Api = function() {}
 
-        var that = {
+    // Api should only be accessed in a static way
+    Api = $.extend({}, Api, {
 
-            getUser: function(username, onComplete) {
-                $.ajax({
-                    url: "user/",
-                    type: 'GET',
-                    data: {
-                        user_id: username
-                    },
-                    dataType: 'json',
-                    cache: false
+        getUser: function(username, onComplete) {
+            $.ajax({
+                url: "user/",
+                type: 'GET',
+                data: {
+                    user_id: username
+                },
+                dataType: 'json',
+                cache: false
 
-                }).done(onComplete);
-            },
+            }).done(onComplete);
+        },
 
-            getAvatar: function(username) {
-                return "user/avatar/"+username;
-            }
+        getAvatar: function(username) {
+            return "user/avatar/"+username;
         }
-
-        return that;
-    }
+    });
 
     return Api;
 })
